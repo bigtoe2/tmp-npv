@@ -105,12 +105,13 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         break;
     }
 
-    draw_profile_status(widget->canvas, &state);
-
     lv_canvas_set_buffer(widget->canvas, widget->cbuf, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT,
                          LV_IMG_CF_TRUE_COLOR);
     lv_canvas_fill_bg(widget->canvas, LVGL_BACKGROUND, LV_OPA_COVER);
     lv_canvas_draw_text(widget->canvas, 0, 0, OUTPUT_CANVAS_WIDTH, &widget->output_label_dsc, text);
+    // profile
+    draw_profile_status(widget->canvas, &state);
+    
     rotate_canvas(widget->canvas, widget->cbuf, widget->cbuf_rot, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT);
 }
 
