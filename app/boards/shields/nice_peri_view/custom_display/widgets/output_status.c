@@ -20,7 +20,10 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "util.h"
 #include <zmk/events/split_peripheral_status_changed.h>
 
+
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
+
+LV_IMG_DECLARE(profiles);
 
 struct output_status_state
 {
@@ -38,6 +41,42 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
     ;
 }
 
+// static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
+// {
+//     char text[20] = {};
+
+//     switch (state.selected_endpoint.transport)
+//     {
+//     case ZMK_TRANSPORT_USB:
+//         strcat(text, LV_SYMBOL_USB);
+//         break;
+//     case ZMK_TRANSPORT_BLE:
+//         if (state.active_profile_bonded)
+//         {
+//             if (state.active_profile_connected)
+//             {
+//                 snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_OK,
+//                          state.selected_endpoint.ble.profile_index + 1);
+//             }
+//             else
+//             {
+//                 snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_CLOSE,
+//                          state.selected_endpoint.ble.profile_index + 1);
+//             }
+//         }
+//         else
+//         {
+//             snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_SETTINGS,
+//                      state.selected_endpoint.ble.profile_index + 1);
+//         }
+//         break;
+//     }
+//     lv_canvas_set_buffer(widget->canvas, widget->cbuf, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT,
+//                          LV_IMG_CF_TRUE_COLOR);
+//     lv_canvas_fill_bg(widget->canvas, LVGL_BACKGROUND, LV_OPA_COVER);
+//     lv_canvas_draw_text(widget->canvas, 0, 0, OUTPUT_CANVAS_WIDTH, &widget->output_label_dsc, text);
+//     rotate_canvas(widget->canvas, widget->cbuf, widget->cbuf_rot, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT);
+// }
 static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
 {
     char text[20] = {};
@@ -52,22 +91,22 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         {
             if (state.active_profile_connected)
             {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_OK,
-                         state.selected_endpoint.ble.profile_index + 1);
+                snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_OK);
             }
             else
             {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_CLOSE,
-                         state.selected_endpoint.ble.profile_index + 1);
+                snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_CLOSE);
             }
         }
         else
         {
-            snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %i " LV_SYMBOL_SETTINGS,
-                     state.selected_endpoint.ble.profile_index + 1);
+            snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_SETTINGS);
         }
         break;
     }
+
+    draw_profile_status(widget->canvas, &state);
+
     lv_canvas_set_buffer(widget->canvas, widget->cbuf, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT,
                          LV_IMG_CF_TRUE_COLOR);
     lv_canvas_fill_bg(widget->canvas, LVGL_BACKGROUND, LV_OPA_COVER);
@@ -103,4 +142,26 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
 lv_obj_t *zmk_widget_output_status_obj(struct zmk_widget_output_status *widget)
 {
     return widget->canvas;
+}
+
+// experimental
+static void draw_inactive_profiles(lv_obj_t *canvas, struct output_status_state *state) {
+    lv_draw_img_dsc_t img_dsc;
+    lv_draw_img_dsc_init(&img_dsc);
+
+    lv_canvas_draw_img(canvas, 18, 129 + BUFFER_OFFSET_BOTTOM, &profiles, &img_dsc);
+}
+
+static void draw_active_profile(lv_obj_t *canvas, struct output_status_state *state) {
+    lv_draw_rect_dsc_t rect_white_dsc;
+    init_rect_dsc(&rect_white_dsc, LVGL_FOREGROUND);
+
+    int offset = (state->selected_endpoint.ble.profile_index + 1) * 7;
+
+    lv_canvas_draw_rect(canvas, 18 + offset, 129 + BUFFER_OFFSET_BOTTOM, 3, 3, &rect_white_dsc);
+}
+
+void draw_profile_status(lv_obj_t *canvas, struct output_status_state *state) {
+    draw_inactive_profiles(canvas, state);
+    draw_active_profile(canvas, state);
 }

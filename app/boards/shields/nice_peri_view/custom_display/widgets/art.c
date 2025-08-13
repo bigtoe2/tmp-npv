@@ -227,3 +227,14 @@ const lv_img_dsc_t mountain = {
     .data_size = 1232,
     .data = mountain_map,
 };
+
+
+const lv_img_dsc_t profiles = {
+    .header.cf = LV_IMG_CF_INDEXED_1BIT,
+    .header.always_zero = 0,
+    .header.reserved = 0,
+    .header.w = 31,
+    .header.h = 3,
+    .data_size = 20,
+    .data = profiles_map,
+};
