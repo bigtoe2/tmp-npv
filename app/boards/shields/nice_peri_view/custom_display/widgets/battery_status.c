@@ -19,7 +19,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/events/battery_state_changed.h>
 #include <zmk/events/split_peripheral_status_changed.h>
 #include <zmk/battery.h>
-#include <zmk/split/bluetooth/central.h>
+
 
 #include "battery_status.h"
 #include "util.h"
