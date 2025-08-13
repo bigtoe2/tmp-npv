@@ -44,7 +44,7 @@ lv_obj_t *zmk_display_status_screen() {
 
     zmk_widget_batteries_status_init(&batteries_status_widget, screen);
 
-    zmk_widget_sleep_status_init(&sleep_status_widget, screen);
+    // zmk_widget_sleep_status_init(&sleep_status_widget, screen);
 
 #if !CONFIG_NICE_PERI_VIEW_ROTATE_DISPLAY
     lv_obj_align(zmk_widget_output_status_obj(&output_status_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
@@ -53,7 +53,7 @@ lv_obj_t *zmk_display_status_screen() {
                  -22, 0);
     lv_obj_align(zmk_widget_batteries_status_obj(&batteries_status_widget), LV_ALIGN_TOP_RIGHT, -53,
                  0);
-    lv_obj_align(zmk_widget_sleep_status_obj(&sleep_status_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+    // lv_obj_align(zmk_widget_sleep_status_obj(&sleep_status_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 #else
     lv_obj_align(zmk_widget_output_status_obj(&output_status_widget), LV_ALIGN_BOTTOM_LEFT, 0, 0);
     lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
