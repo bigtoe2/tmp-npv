@@ -91,16 +91,16 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
         {
             if (state.active_profile_connected)
             {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_OK);
+                snprintf(text, sizeof(text), LV_SYMBOL_WIFI);
             }
             else
             {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_CLOSE);
+                snprintf(text, sizeof(text), LV_SYMBOL_CLOSE);
             }
         }
         else
         {
-            snprintf(text, sizeof(text), LV_SYMBOL_WIFI "  " LV_SYMBOL_SETTINGS);
+            snprintf(text, sizeof(text), LV_SYMBOL_SETTINGS);
         }
         break;
     }
@@ -111,7 +111,7 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     lv_canvas_draw_text(widget->canvas, 0, 0, OUTPUT_CANVAS_WIDTH, &widget->output_label_dsc, text);
     // profile
     draw_profile_status(widget->canvas, &state);
-    
+
     rotate_canvas(widget->canvas, widget->cbuf, widget->cbuf_rot, OUTPUT_CANVAS_WIDTH, OUTPUT_CANVAS_HEIGHT);
 }
 
@@ -150,16 +150,16 @@ static void draw_inactive_profiles(lv_obj_t *canvas, struct output_status_state 
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
 
-    lv_canvas_draw_img(canvas, 18, 129 + BUFFER_OFFSET_BOTTOM, &profiles, &img_dsc);
+    lv_canvas_draw_img(canvas, 33, 0, &profiles, &img_dsc);
 }
 
 static void draw_active_profile(lv_obj_t *canvas, struct output_status_state *state) {
     lv_draw_rect_dsc_t rect_white_dsc;
     init_rect_dsc(&rect_white_dsc, LVGL_FOREGROUND);
 
-    int offset = (state->selected_endpoint.ble.profile_index + 1) * 7;
+    int offset = (state->selected_endpoint.ble.profile_index) * 7;
 
-    lv_canvas_draw_rect(canvas, 18 + offset, 129 + BUFFER_OFFSET_BOTTOM, 3, 3, &rect_white_dsc);
+    lv_canvas_draw_rect(canvas, 33 + offset, 0, 3, 3, &rect_white_dsc);
 }
 
 void draw_profile_status(lv_obj_t *canvas, struct output_status_state *state) {
